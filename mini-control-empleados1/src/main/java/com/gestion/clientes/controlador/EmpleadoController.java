@@ -17,10 +17,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.gestion.clientes.entidades.Empleado;
 import com.gestion.clientes.servicio.EmpleadoService;
 import com.gestion.clientes.util.pagination.PageRender;
+import com.gestion.clientes.util.reportes.EmpleadoExporterExcel;
+import com.gestion.clientes.util.reportes.EmpleadoExporterPDF;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.DocumentException;
+
+import antlr.collections.List;
 
 import java.awt.print.Pageable;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Controller
@@ -118,4 +129,43 @@ public class EmpleadoController {
 		}
 		return "redirect:/listar";
 	}
+    
+    
+    @GetMapping("/exportarPDF")
+	public void exportarListadoDeEmpleadosEnPDF(HttpServletResponse response) throws DocumentException, IOException {
+		response.setContentType("application/pdf");
+		
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String fechaActual = dateFormatter.format(new Date());
+		
+		String cabecera = "Content-Disposition";
+		String valor = "attachment; filename=Empleados_" + fechaActual + ".pdf";
+		
+		response.setHeader(cabecera, valor);
+		
+		java.util.List<Empleado> empleados = empleadoService.findAll();
+		
+		EmpleadoExporterPDF exporter = new EmpleadoExporterPDF(empleados);
+		exporter.exportar(response);
+	}
+    
+    @GetMapping("/exportarExcel")
+	public void exportarListadoDeEmpleadosEnExcel(HttpServletResponse response) throws DocumentException, IOException {
+		response.setContentType("application/octet-stream");
+		
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String fechaActual = dateFormatter.format(new Date());
+		
+		String cabecera = "Content-Disposition";
+		String valor = "attachment; filename=Empleados_" + fechaActual + ".xlsx";
+		
+		response.setHeader(cabecera, valor);
+		
+		java.util.List<Empleado> empleados = empleadoService.findAll();
+		
+		EmpleadoExporterExcel exporter = new EmpleadoExporterExcel(empleados);
+		exporter.exportar(response);
+	}
+    
+    
 }

@@ -1,29 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head">
-	<meta charset="ISO-8859-1">
-	<title>Gestion de empleados</title>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-		integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+<meta charset="utf-8">
+<title>Gestión de empleados</title>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
 </head>
-
 <body>
 
+	<header th:fragment="header">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<a class="navbar-brand" href="/">Gestión de empleados</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarNav" aria-controls="navbarNav"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+			    <ul class="navbar-nav">
+			       <li class="nav-item"><a class="nav-link">Bienvenido [[${#httpServletRequest.remoteUser}]]
+			           </a>
+			       </li>
+			    </ul>
+			    <form class="d-flex" th:action="@{/logout}" method="post">
+			              <input class="btn btn-secondary" type="submit" value="Cerrar sesión" />
+			           </form>
+			</div>
+		</nav>
+	</header>
 
-<header th:fragment="header">
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<a class="navbar-brand" href="#">Gestión de empleados </a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-			aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-
-	</nav>
-
-</header>
-
-<div class="container">
+	<div class="container">
 		<div th:if="${success != null}"
 			class="alert alert-primary alert-dismissible fade show">
 			[[${success}]]>
@@ -31,9 +39,7 @@
 				aria-label="Close"></button>
 		</div>
 	</div>
-	
-	
-	
+
 	<div class="container">
 		<div th:if="${error != null}"
 			class="alert alert-danger alert-dismissible fade show">
@@ -42,7 +48,6 @@
 				aria-label="Close"></button>
 		</div>
 	</div>
-	
 
 	<div class="container">
 		<div th:if="${warning != null}"
@@ -53,7 +58,16 @@
 		</div>
 	</div>
 
-<footer th:fragment="footer">
+	<div class="container">
+		<div th:if="${info != null}"
+			class="alert alert-info alert-dismissible fade show">
+			[[${info}]]>
+			<button type="button" class="close" data-dismiss="alert"
+				aria-label="Close"></button>
+		</div>
+	</div>
+
+	<footer th:fragment="footer">
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 			integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
 			crossorigin="anonymous"></script>
